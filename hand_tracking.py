@@ -23,14 +23,14 @@ if not camera.isOpened():
 print("GestureBot hand tracking started.")
 print("Press Q to quit.")
 
-#previous_x = None
-#previous_y = None
+previous_x = None
+previous_y = None
 
-#candidate_direction = "WAITING"
-#stable_direction = "WAITING"
-#candidate_count = 0
+candidate_direction = "WAITING"
+stable_direction = "WAITING"
+candidate_count = 0
 
-#STABLE_FRAMES = 3
+STABLE_FRAMES = 3
 while True:
     success, frame = camera.read()
 
@@ -65,7 +65,7 @@ while True:
             x = int(fingertip.x * width)
             y = int(fingertip.y * height)
 
-            """
+            
             current_x = x
             current_y = y
             if previous_x is not None and previous_y is not None:
@@ -100,30 +100,10 @@ while True:
                     (0, 255, 0),
                     2
                 )    
-            """
-            # Select a command from the fingertip's screen position
-            if x < width * 0.35:
-                direction = "LEFT"
-            elif x > width * 0.65:
-                direction = "RIGHT"
-            elif y < height * 0.35:
-                direction = "UP"
-            elif y > height * 0.65:
-                direction = "DOWN"
-            else:
-                direction = "STOP" 
+            
 
-            cv2.putText(
-                frame,
-                f"Direction: {direction}",
-                (20, 80),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.8,
-                (0, 255, 0),
-                2
-            ) 
-            #previous_x = current_x
-            #previous_y = current_y
+            previous_x = current_x
+            previous_y = current_y
             # Highlight the fingertip
             cv2.circle(
                 frame,

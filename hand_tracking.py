@@ -1,5 +1,11 @@
 import cv2
 import mediapipe as mp
+import socket
+
+
+# Send commands to Webots on this computer
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+webots_address = ("127.0.0.1", 5005)
 
 # Initialize MediaPipe hand tracking
 mp_hands = mp.solutions.hands
@@ -47,6 +53,7 @@ while True:
     # Detect the hand
     results = hands.process(rgb_frame)
 
+    direction = "STOP"
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
 
@@ -142,7 +149,7 @@ while True:
                 (0, 255, 0),
                 2
             )
-
+    sock.sendto(direction.encode("utf-8"), webots_address)
     cv2.imshow("GestureBot - Hand Tracking", frame)
 
     # Press Q to exit
@@ -150,5 +157,6 @@ while True:
         break
 
 camera.release()
+sock.close()
 hands.close()
 cv2.destroyAllWindows()
